@@ -1,4 +1,5 @@
 #include "engine.h"
+#include "game.h"
 
 std::map<HWND, Engine*> Engine::wndProcMap;
 
@@ -6,9 +7,13 @@ Engine::Engine() {
     hWnd = 0;
     d3d = 0;
     d3ddev = 0;
+    game = 0;
 }
 
 Engine::~Engine() {
+    if (game) {
+        delete game;
+    }
 }
 
 void Engine::initialize(HINSTANCE hInstance, int width, int height, bool bFullscreen) {
@@ -43,9 +48,13 @@ void Engine::initialize(HINSTANCE hInstance, int width, int height, bool bFullsc
 
     ShowWindow(hWnd, TRUE);
     initD3D(hWnd, width, height, bFullscreen);
+
+    game = new Game();
 }
 
 void Engine::run() {
+    game->Initialize();
+
     MSG msg;
     while (true) {
         if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) == TRUE) {
@@ -57,6 +66,8 @@ void Engine::run() {
             break;
         }
 
+        // TODO: get dt
+        game->Update(0);
         render_frame();
     }
 }
@@ -94,7 +105,7 @@ void Engine::render_frame() {
 
         d3ddev->BeginScene();
 
-        // TODO: tell the game to render here
+        game->Render(d3ddev);
 
         d3ddev->EndScene();
 

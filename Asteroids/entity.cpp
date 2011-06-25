@@ -1,5 +1,7 @@
 #include "entity.h"
 
+int Entity::ID_SEED = 0;
+
 void Entity::update(double dt) {
     // TODO: update position based on velocity
 }

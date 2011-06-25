@@ -14,7 +14,7 @@ public:
     
     void add(const Vector2D& rhs);
     double getMagnitude() const;
-    double getDirection() const;
+    double getDirectionRadians() const;
     
 private:
     double x;

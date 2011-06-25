@@ -9,8 +9,8 @@
 
 const LPWSTR WINDOW_TITLE = L"Engine";
 const LPWSTR WINDOW_CLASS = L"WCOurEngine";
-const int WINDOW_WIDTH = 800;
-const int WINDOW_HEIGHT = 500;
+
+class Game;
 
 class Engine {
 public:
@@ -33,6 +33,7 @@ private:
     HWND hWnd;
     LPDIRECT3D9 d3d;            // the pointer to our Direct3D interface
     LPDIRECT3DDEVICE9 d3ddev;   // the pointer to the device class
+    Game* game;
 
     static std::map<HWND, Engine*> wndProcMap;
 

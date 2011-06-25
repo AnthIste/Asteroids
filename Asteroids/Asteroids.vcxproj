@@ -79,13 +79,21 @@
   <ItemGroup>
     <ClCompile Include="engine.cpp" />
     <ClCompile Include="entity.cpp" />
+    <ClCompile Include="game.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="vector2d.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine.h" />
     <ClInclude Include="entity.h" />
-    <ClInclude Include="eventhandler.h" />
+    <ClInclude Include="entitymanager.h" />
+    <ClInclude Include="entityrepresentation.h" />
+    <ClInclude Include="entityrepresentationmanager.h" />
+    <ClInclude Include="eventlistener.h" />
+    <ClInclude Include="eventsource.h" />
+    <ClInclude Include="game.h" />
     <ClInclude Include="point2d.h" />
+    <ClInclude Include="spaceship.h" />
     <ClInclude Include="vector2d.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
