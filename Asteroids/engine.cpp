@@ -17,6 +17,8 @@ Engine::~Engine() {
 }
 
 void Engine::initialize(HINSTANCE hInstance, int width, int height, bool bFullscreen) {
+    game = new Game();
+
     WNDCLASSEX wc;
 
     ZeroMemory(&wc, sizeof(WNDCLASSEX));
@@ -50,8 +52,6 @@ void Engine::initialize(HINSTANCE hInstance, int width, int height, bool bFullsc
 
     ShowWindow(hWnd, TRUE);
     initD3D(hWnd, width, height, bFullscreen);
-
-    game = new Game();
 }
 
 void Engine::run() {
@@ -149,7 +149,7 @@ LRESULT CALLBACK Engine::onWindowEvent(HWND hWnd, UINT message, WPARAM wParam, L
         } break;
     }
 
-    // TODO: send the game the event to map to game events
+    game->HandleInput(message, wParam, lParam);
 
     return DefWindowProc(hWnd, message, wParam, lParam);
 }

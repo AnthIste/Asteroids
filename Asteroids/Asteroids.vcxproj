@@ -84,6 +84,7 @@
     <ClCompile Include="entityrepresentationmanager.cpp" />
     <ClCompile Include="eventsource.cpp" />
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="inputcontextgame.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="spaceship.cpp" />
     <ClCompile Include="vector2d.cpp" />
@@ -97,6 +98,8 @@
     <ClInclude Include="eventlistener.h" />
     <ClInclude Include="eventsource.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="inputcontext.h" />
+    <ClInclude Include="inputcontextgame.h" />
     <ClInclude Include="point2d.h" />
     <ClInclude Include="spaceship.h" />
     <ClInclude Include="vector2d.h" />
