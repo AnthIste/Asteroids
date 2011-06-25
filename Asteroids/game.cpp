@@ -1,5 +1,6 @@
 #include "game.h"
 #include "inputcontextgame.h"
+#include "spaceship.h"
 
 Game::Game() {
     entityManager.addListener(&entityRepresentationManager);
@@ -54,6 +55,8 @@ void Game::Render(LPDIRECT3DDEVICE9 d3ddev) {
     // TODO: render game in correct order (background, asteroids, spaceship, HUD, etc)
     D3DRECT rect = {0+score, 0, 100+score, 100};
     d3ddev->Clear(1, &rect, D3DCLEAR_TARGET, D3DCOLOR_XRGB(50, 40, 100), 1.0f, 0);
+
+    entityRepresentationManager.getRepresentation(spaceship->getId())->render(d3ddev);
 }
 
 void Game::onEvent(Event_t eventType, int param1, int param2, void* extra) {

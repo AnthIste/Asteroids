@@ -3,8 +3,7 @@
 
 #include <map>
 #include "eventlistener.h"
-
-class EntityRepresentation;
+#include "entityrepresentation.h"
 
 class EntityRepresentationManager: public EventListener {
 public:
