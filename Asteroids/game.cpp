@@ -69,6 +69,7 @@ void Game::onEvent(Event_t eventType, int param1, int param2, void* extra) {
     switch (eventType) {
         case EVT_SPACESHIP_THRUST:
             spaceship->thrust();
+            spaceship->setTarget(param1, param2);
             break;
 
         case EVT_SPACESHIP_UNTHRUST:
@@ -78,6 +79,10 @@ void Game::onEvent(Event_t eventType, int param1, int param2, void* extra) {
 
         case EVT_SPACESHIP_RESET:
             spaceship->setPos(Point2D(0.0, 0.0));
+            break;
+
+        case EVT_SPACESHIP_CHANGETARGET:
+            spaceship->setTarget(param1, param2);
             break;
 
         default:

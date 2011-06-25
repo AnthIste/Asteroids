@@ -9,10 +9,12 @@ public:
     virtual ~Spaceship();
 
     virtual void update(double dt);
+    void setTarget(double x, double y);
     void thrust();
     void unthrust();
 
 private:
+    Point2D target;
 
 };
 
