@@ -4,6 +4,7 @@
 #include <windows.h>
 #include <d3d9.h>
 #include <vector>
+#include "eventsource.h"
 #include "eventlistener.h"
 #include "entitymanager.h"
 #include "entityrepresentationmanager.h"
@@ -12,7 +13,7 @@ class InputContext;
 class Spaceship;
 
 // TODO: link game events to input controller
-class Game: public EventListener {
+class Game: public EventSource, public EventListener {
 public:
     Game();
     ~Game();

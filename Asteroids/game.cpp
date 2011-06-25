@@ -6,6 +6,7 @@ Game::Game() {
     entityManager.addListener(&entityRepresentationManager);
     inputContext = new InputContextGame();
     inputContext->addListener(this);
+    this->addListener(this);
 
     // TODO: initialize all pointers etc to null
     spaceship = 0;
@@ -72,6 +73,7 @@ void Game::onEvent(Event_t eventType, int param1, int param2, void* extra) {
 
         case EVT_SPACESHIP_UNTHRUST:
             spaceship->unthrust();
+            triggerEvent(EVT_SPACESHIP_RESET, 0, 0, 0);
             break;
 
         case EVT_SPACESHIP_RESET:
