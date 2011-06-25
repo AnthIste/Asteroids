@@ -87,6 +87,7 @@
     <ClCompile Include="inputcontextgame.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="spaceship.cpp" />
+    <ClCompile Include="spaceshiprepresentation.cpp" />
     <ClCompile Include="vector2d.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -95,6 +96,7 @@
     <ClInclude Include="entitymanager.h" />
     <ClInclude Include="entityrepresentation.h" />
     <ClInclude Include="entityrepresentationmanager.h" />
+    <ClInclude Include="entitytypes.h" />
     <ClInclude Include="eventlistener.h" />
     <ClInclude Include="events.h" />
     <ClInclude Include="eventsource.h" />
@@ -103,6 +105,7 @@
     <ClInclude Include="inputcontextgame.h" />
     <ClInclude Include="point2d.h" />
     <ClInclude Include="spaceship.h" />
+    <ClInclude Include="spaceshiprepresentation.h" />
     <ClInclude Include="vector2d.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

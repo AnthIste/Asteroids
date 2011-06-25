@@ -1,0 +1,10 @@
+#ifndef ASTEROIDS_ENTITY_TYPES_
+#define ASTEROIDS_ENTITY_TYPES_
+
+enum EntityType_t {
+    ENT_SPACESHIP,
+    ENT_ASTEROID,
+    ENT_BULLET
+};
+
+#endif  // ASTEROIDS_ENTITY_TYPES_

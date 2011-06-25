@@ -26,6 +26,8 @@ void Game::Initialize() {
     // TODO: create all initial entities, reset score, etc
     score = 0;
     lives = 3;
+
+    spaceship = dynamic_cast<Spaceship*>(entityManager.createEntity(ENT_SPACESHIP));
 }
 
 void Game::Reset() {
@@ -34,11 +36,11 @@ void Game::Reset() {
 }
 
 void Game::Cleanup() {
-    // TODO: iterate through all entities etc and destroy them
+    entityManager.purge();
 }
 
 void Game::Update(int dt) {
-    // TODO: update all entities
+    entityManager.updateAll(dt);
 }
 
 void Game::HandleInput(UINT message, WPARAM wParam, LPARAM lParam) {
@@ -65,11 +67,15 @@ void Game::onEvent(Event_t eventType, int param1, int param2, void* extra) {
 
     switch (eventType) {
         case EVT_SPACESHIP_THRUST:
-            score++;
+            spaceship->thrust();
             break;
 
-        case EVT_ASTEROID_SPAWN:
-            score--;
+        case EVT_SPACESHIP_UNTHRUST:
+            spaceship->unthrust();
+            break;
+
+        case EVT_SPACESHIP_RESET:
+            spaceship->setPos(Point2D(0.0, 0.0));
             break;
 
         default:

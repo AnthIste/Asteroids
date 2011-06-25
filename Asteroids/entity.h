@@ -4,6 +4,7 @@
 #include "eventsource.h"
 #include "point2d.h"
 #include "vector2d.h"
+#include "entitytypes.h"
 
 class Entity: public EventSource {
 public:
@@ -15,10 +16,12 @@ public:
     void setVelocity(const Vector2D& velocity) { m_velocity = velocity; }
     Point2D getPos() const { return m_pos; }
     Vector2D getVelocity() const { return m_velocity; }
+    double getX() const { return m_pos.x; }
+    double getY() const { return m_pos.y; }
     int getId() const { return m_id; }
-
-    void update(double dt);
     bool collides(const Entity& ent);
+
+    virtual void update(double dt) = 0;
 
     // TODO: create interface for entities to signal events
 

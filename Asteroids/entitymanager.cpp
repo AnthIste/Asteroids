@@ -6,13 +6,7 @@ EntityManager::EntityManager() {
 }
 
 EntityManager::~EntityManager() {
-    for (unsigned int k = 0; k < vEntities.size(); k++) {
-        Entity* entity = vEntities[k];
-        triggerEvent(EVT_ENTITY_DESTROYED, entity->getId(), 0, 0);
-        delete entity;
-    }
-
-    vEntities.clear();
+    purge();
 }
 
 void EntityManager::addEntity(Entity* entity) {
@@ -59,6 +53,23 @@ Entity* EntityManager::createEntity(EntityType_t entityType) {
     }
 
     vEntities.push_back(newEntity);
-    triggerEvent(EVT_ENTITY_CREATED, newEntity->getId(), 0, 0);    
+    triggerEvent(EVT_ENTITY_CREATED, newEntity->getId(), static_cast<int>(entityType), static_cast<void*>(newEntity));    
     return newEntity;
+}
+
+void EntityManager::purge() {
+    for (unsigned int k = 0; k < vEntities.size(); k++) {
+        Entity* entity = vEntities[k];
+        triggerEvent(EVT_ENTITY_DESTROYED, entity->getId(), 0, 0);
+        delete entity;
+    }
+
+    vEntities.clear();
+}
+
+void EntityManager::updateAll(double dt) {
+    for (unsigned int k = 0; k < vEntities.size(); k++) {
+        Entity* entity = vEntities[k];
+        entity->update(dt);
+    }
 }

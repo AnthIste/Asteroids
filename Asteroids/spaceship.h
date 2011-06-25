@@ -8,6 +8,10 @@ public:
     Spaceship();
     virtual ~Spaceship();
 
+    virtual void update(double dt);
+    void thrust();
+    void unthrust();
+
 private:
 
 };

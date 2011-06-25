@@ -14,6 +14,8 @@ public:
 
     void addEntity(Entity* entity);
     void removeEntity(int id);
+    void purge();
+    void updateAll(double dt);
     const std::vector<Entity*>& getEntities() const { return vEntities; }
 
     Entity* createEntity(EntityType_t entityType);
