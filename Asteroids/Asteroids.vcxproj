@@ -96,6 +96,7 @@
     <ClInclude Include="entityrepresentation.h" />
     <ClInclude Include="entityrepresentationmanager.h" />
     <ClInclude Include="eventlistener.h" />
+    <ClInclude Include="events.h" />
     <ClInclude Include="eventsource.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="inputcontext.h" />
