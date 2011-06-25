@@ -11,6 +11,7 @@ public:
     virtual ~EventSource();
 
     void addListener(EventListener* listener);
+    // TODO: add method of removing listeners
 
 protected:
     void triggerEvent(int eventId, int param1, int param2, void* extra);

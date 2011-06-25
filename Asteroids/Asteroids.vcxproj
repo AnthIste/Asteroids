@@ -79,8 +79,13 @@
   <ItemGroup>
     <ClCompile Include="engine.cpp" />
     <ClCompile Include="entity.cpp" />
+    <ClCompile Include="entitymanager.cpp" />
+    <ClCompile Include="entityrepresentation.cpp" />
+    <ClCompile Include="entityrepresentationmanager.cpp" />
+    <ClCompile Include="eventsource.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="spaceship.cpp" />
     <ClCompile Include="vector2d.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -32,4 +32,6 @@ void Game::Update(int dt) {
 
 void Game::Render(LPDIRECT3DDEVICE9 d3ddev) {
     // TODO: render game in correct order (background, asteroids, spaceship, HUD, etc)
+    D3DRECT rect = {0, 0, 100, 100};
+    d3ddev->Clear(1, &rect, D3DCLEAR_TARGET, D3DCOLOR_XRGB(50, 40, 100), 1.0f, 0);
 }

@@ -3,8 +3,8 @@
 
 class EventListener {
 public:
-    EventListener();
-    virtual ~EventListener();
+    EventListener() {}
+    virtual ~EventListener() {}
 
     virtual void onEvent(int id, int param1, int param2, void* extra) = 0;
 

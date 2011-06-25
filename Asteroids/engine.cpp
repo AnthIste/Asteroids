@@ -46,6 +46,8 @@ void Engine::initialize(HINSTANCE hInstance, int width, int height, bool bFullsc
         hInstance,
         NULL);
 
+    wndProcMap[hWnd] = this;
+
     ShowWindow(hWnd, TRUE);
     initD3D(hWnd, width, height, bFullscreen);
 
@@ -73,6 +75,7 @@ void Engine::run() {
 }
 
 void Engine::cleanup() {
+    wndProcMap[hWnd] = 0;
     cleanD3D();
 }
 
@@ -152,5 +155,9 @@ LRESULT CALLBACK Engine::onWindowEvent(HWND hWnd, UINT message, WPARAM wParam, L
 }
 
 LRESULT CALLBACK Engine::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
-    return wndProcMap[hWnd]->onWindowEvent(hWnd, message, wParam, lParam);
+    if (wndProcMap[hWnd]) {
+        return wndProcMap[hWnd]->onWindowEvent(hWnd, message, wParam, lParam);
+    } else {
+        return DefWindowProc(hWnd, message, wParam, lParam);
+    }
 }
