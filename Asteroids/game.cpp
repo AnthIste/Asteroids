@@ -56,16 +56,16 @@ void Game::Render(LPDIRECT3DDEVICE9 d3ddev) {
     d3ddev->Clear(1, &rect, D3DCLEAR_TARGET, D3DCOLOR_XRGB(50, 40, 100), 1.0f, 0);
 }
 
-void Game::onEvent(int id, int param1, int param2, void* extra) {
+void Game::onEvent(Event_t eventType, int param1, int param2, void* extra) {
     // TODO: handle all game events here
     // signal new events if necessary
 
-    switch (id) {
-        case 0:
+    switch (eventType) {
+        case EVT_SPACESHIP_THRUST:
             score++;
             break;
 
-        case 1:
+        case EVT_ASTEROID_SPAWN:
             score--;
             break;
 

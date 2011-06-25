@@ -13,6 +13,7 @@ EntityManager::~EntityManager() {
 
 void EntityManager::addEntity(Entity* entity) {
     vEntities.push_back(entity);
+    // TODO: trigger correct event
 }
 
 void EntityManager::removeEntity(int id) {

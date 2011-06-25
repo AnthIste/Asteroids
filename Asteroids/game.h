@@ -24,7 +24,7 @@ public:
     void Update(int dt);
     void HandleInput(UINT message, WPARAM wParam, LPARAM lParam);
     void Render(LPDIRECT3DDEVICE9 d3ddev);
-    virtual void onEvent(int id, int param1, int param2, void* extra);
+    virtual void onEvent(Event_t eventType, int param1, int param2, void* extra);
 
 private:
     EntityManager entityManager;

@@ -11,7 +11,7 @@ public:
     EntityRepresentationManager();
     virtual ~EntityRepresentationManager();
 
-    virtual void onEvent(int id, int param1, int param2, void* extra);
+    virtual void onEvent(Event_t eventType, int param1, int param2, void* extra);
     EntityRepresentation* getRepresentation(int id);
 
 private:

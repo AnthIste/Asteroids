@@ -2,6 +2,7 @@
 #define ASTEROIDS_EVENTSOURCE_H_
 
 #include <vector>
+#include "events.h"
 
 class EventListener;
 
@@ -14,7 +15,7 @@ public:
     // TODO: add method of removing listeners
 
 protected:
-    void triggerEvent(int eventId, int param1, int param2, void* extra);
+    void triggerEvent(Event_t eventType, int param1, int param2, void* extra);
 
 private:
     std::vector<EventListener*> vListeners;

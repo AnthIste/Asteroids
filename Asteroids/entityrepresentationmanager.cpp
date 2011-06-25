@@ -11,7 +11,7 @@ EntityRepresentationManager::~EntityRepresentationManager() {
     }
 }
 
-void EntityRepresentationManager::onEvent(int id, int param1, int param2, void* extra) {
+void EntityRepresentationManager::onEvent(Event_t eventType, int param1, int param2, void* extra) {
     // TODO: check for entity create/delete and map representation accordingly
 }
 
