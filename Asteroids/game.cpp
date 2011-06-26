@@ -45,6 +45,17 @@ void Game::Cleanup() {
 
 void Game::Update(int dt) {
     entityManager.updateAll(dt);
+
+    // FIXME: set playing area size
+    if (spaceship->getPos().x > 800) {
+        spaceship->setPos(Point2D(0.0, spaceship->getPos().y));
+    } else if (spaceship->getPos().x < 0) {
+        spaceship->setPos(Point2D(800, spaceship->getPos().y));
+    } else if (spaceship->getPos().y > 500) {
+        spaceship->setPos(Point2D(spaceship->getPos().x, 0.0));
+    } else if (spaceship->getPos().y < 0) {
+        spaceship->setPos(Point2D(spaceship->getPos().x, 500));
+    } 
 }
 
 void Game::HandleInput(UINT message, WPARAM wParam, LPARAM lParam) {
