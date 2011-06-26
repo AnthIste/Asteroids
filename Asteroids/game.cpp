@@ -2,6 +2,7 @@
 #include "inputcontextgame.h"
 #include "spaceship.h"
 #include "bullet.h"
+#include "asteroid.h"
 
 Game::Game() {
     entityManager.addListener(&entityRepresentationManager);
@@ -30,6 +31,27 @@ void Game::Initialize() {
     lives = 3;
 
     spaceship = dynamic_cast<Spaceship*>(entityManager.createEntity(ENT_SPACESHIP));
+    spaceship->setPos(Point2D(400, 250));
+    triggerEvent(EVT_SPACESHIP_SPAWN, spaceship->getX(), spaceship->getY(), spaceship);
+
+    srand(time(0));
+    bullets.clear();
+
+    for (int k = 0; k < 3; k++) {
+        int x = rand() % 800 + 1;
+        int y = rand() % 500 + 1;
+
+        double vx = (rand() % 100)/100.0*3 - 1.5;
+        double vy = (rand() % 100)/100.0*3 - 1.5;
+
+        Asteroid* roid = dynamic_cast<Asteroid*>(entityManager.createEntity(ENT_ASTEROID));
+        roid->setPos(Point2D(x, y));
+        roid->setVelocity(Vector2D(vx, vy));
+
+        triggerEvent(EVT_ASTEROID_SPAWN, roid->getX(), roid->getY(), roid);
+
+        asteroids.push_back(roid);
+    }
 }
 
 void Game::Reset() {
@@ -42,6 +64,8 @@ void Game::Cleanup() {
     
     // TODO: initialize all pointers etc to null
     spaceship = 0;
+    asteroids.clear();
+    bullets.clear();
 }
 
 void Game::Update(int dt) {
@@ -56,7 +80,35 @@ void Game::Update(int dt) {
         spaceship->setPos(Point2D(spaceship->getPos().x, 0.0));
     } else if (spaceship->getPos().y < 0) {
         spaceship->setPos(Point2D(spaceship->getPos().x, 500));
-    } 
+    }
+
+    for (unsigned int k = 0; k < asteroids.size(); k++) {
+        Asteroid* roid = asteroids[k];
+
+        if (roid->getPos().x > 800) {
+            roid->setPos(Point2D(0.0, roid->getPos().y));
+        } else if (roid->getPos().x < 0) {
+            roid->setPos(Point2D(800, roid->getPos().y));
+        } else if (roid->getPos().y > 500) {
+            roid->setPos(Point2D(roid->getPos().x, 0.0));
+        } else if (roid->getPos().y < 0) {
+            roid->setPos(Point2D(roid->getPos().x, 500));
+        }
+    }
+
+    for (unsigned int k = 0; k < bullets.size(); k++) {
+        Bullet* bullet = bullets[k];
+
+        for (unsigned int j = 0; j < asteroids.size(); j++) {
+            Asteroid* roid = asteroids[j];
+
+            if (bullet->collides(*roid)) {
+                triggerEvent(EVT_BULLET_DESTROYED, k, 0, bullet);
+                triggerEvent(EVT_ASTEROID_DESTROYED, j, 0, roid);
+                break;
+            }
+        }
+    }
 }
 
 void Game::HandleInput(UINT message, WPARAM wParam, LPARAM lParam) {
@@ -72,21 +124,46 @@ void Game::Render(LPDIRECT3DDEVICE9 d3ddev) {
     // Clear the background:
     d3ddev->Clear(1, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
 
-    // Render the ship
-    entityRepresentationManager.getRepresentation(spaceship->getId())->render(d3ddev);
-
     // Render stars
-    srand(666);
+    // Important to use same seed every frame
+    srand(1);
     for (int k = 0; k < 50; k++) {
         int x = rand() % 800 + 1;
         int y = rand() % 500 + 1;
 
-        D3DRECT starPos = {x, y, x+1, y+1};
-        d3ddev->Clear(1, &starPos, D3DCLEAR_TARGET, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0);
+        int sizeSeed = rand() % 100;
+        int size = 1;
+
+        if (sizeSeed > 90) {
+            size = 3;
+        } else if (sizeSeed > 70) {
+            size = 2;
+        }
+
+        if (size == 3) {
+            D3DRECT starPos = {x, y, x+3, y+3};
+            d3ddev->Clear(1, &starPos, D3DCLEAR_TARGET, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0);
+        } else if (size == 2) {
+            D3DRECT starPos = {x, y, x+2, y+2};
+            d3ddev->Clear(1, &starPos, D3DCLEAR_TARGET, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0);
+        } else {
+            D3DRECT starPos = {x, y, x+1, y+1};
+            d3ddev->Clear(1, &starPos, D3DCLEAR_TARGET, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0);
+        }
     }
 
+    // Render asteroids
+    for (unsigned int k = 0; k < asteroids.size(); k++) {
+        Asteroid* roid = asteroids[k];
+
+        entityRepresentationManager.getRepresentation(roid->getId())->render(d3ddev);
+    }
+
+    // Render the ship
+    entityRepresentationManager.getRepresentation(spaceship->getId())->render(d3ddev);
+
     // Render bullets
-    for (int k = 0; k < bullets.size(); k++) {
+    for (unsigned int k = 0; k < bullets.size(); k++) {
         Bullet* bullet = bullets[k];
 
         if (!spaceship->collides(*bullet)) {
@@ -121,6 +198,14 @@ void Game::onEvent(Event_t eventType, int param1, int param2, void* extra) {
             eventFireBullet(param1, param2, extra);
             break;
 
+        case EVT_ASTEROID_DESTROYED:
+            eventAsteroidDestroyed(param1, param2, extra);
+            break;
+
+        case EVT_BULLET_DESTROYED:
+            eventBulletDestroyed(param1, param2, extra);
+            break;
+
         default:
             break;
     }
@@ -136,4 +221,37 @@ void Game::eventFireBullet(int param1, int param2, void* extra) {
     bullet->setVelocity(velocity);
 
     bullets.push_back(bullet);
+
+    triggerEvent(EVT_BULLET_SPAWN, 0, 0, bullet);
+}
+
+void Game::eventAsteroidDestroyed(int param1, int param2, void* extra) {
+    Asteroid* roid = static_cast<Asteroid*>(extra);
+    int x = roid->getX();
+    int y = roid->getY();
+    int size = roid->getSize();
+
+    asteroids.erase(asteroids.begin() + param1);
+    entityManager.removeEntity(roid->getId());
+
+    /*srand(time(0));
+    for (int k = 0; k < size; k++) {
+        double vx = (rand() % 100)/100.0*3 - 1.5;
+        double vy = (rand() % 100)/100.0*3 - 1.5;
+
+        Asteroid* newRoid = dynamic_cast<Asteroid*>(entityManager.createEntity(ENT_ASTEROID));
+        newRoid->setPos(Point2D(x, y));
+        newRoid->setVelocity(Vector2D(vx, vy));
+        newRoid->setSize(size-1);
+
+        triggerEvent(EVT_ASTEROID_SPAWN, newRoid->getX(), newRoid->getY(), newRoid);
+
+        asteroids.push_back(newRoid);
+    }*/
+}
+
+void Game::eventBulletDestroyed(int param1, int param2, void* extra) {
+    Bullet* bullet = static_cast<Bullet*>(extra);
+    bullets.erase(bullets.begin() + param1);
+    entityManager.removeEntity(bullet->getId());
 }

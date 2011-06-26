@@ -4,6 +4,7 @@
 enum Event_t {
     // Asteroid events
     EVT_ASTEROID_SPAWN,
+    EVT_ASTEROID_DESTROYED,
 
     // Spaceship events
     EVT_SPACESHIP_SPAWN,
@@ -15,6 +16,8 @@ enum Event_t {
     
     // Bullet events
     EVT_FIRE_BULLET,
+    EVT_BULLET_SPAWN,
+    EVT_BULLET_DESTROYED,
 
     // Game events
     EVT_GAME_RESTART,

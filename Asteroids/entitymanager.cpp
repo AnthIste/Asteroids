@@ -2,6 +2,7 @@
 #include "entity.h"
 #include "spaceship.h"
 #include "bullet.h"
+#include "asteroid.h"
 
 EntityManager::EntityManager() {
 }
@@ -37,7 +38,7 @@ Entity* EntityManager::createEntity(EntityType_t entityType) {
 
     switch (entityType) {
         case ENT_ASTEROID:
-            //newEntity = new Asteroid();
+            newEntity = new Asteroid();
             break;
 
         case ENT_BULLET:
@@ -55,6 +56,7 @@ Entity* EntityManager::createEntity(EntityType_t entityType) {
 
     vEntities.push_back(newEntity);
     triggerEvent(EVT_ENTITY_CREATED, newEntity->getId(), static_cast<int>(entityType), static_cast<void*>(newEntity));    
+    
     return newEntity;
 }
 

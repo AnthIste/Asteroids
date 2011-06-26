@@ -2,6 +2,7 @@
 #define ASTEROIDS_GAME_H_
 
 #include <windows.h>
+#include <time.h>
 #include <d3d9.h>
 #include <vector>
 #include "eventsource.h"
@@ -12,6 +13,7 @@
 class InputContext;
 class Spaceship;
 class Bullet;
+class Asteroid;
 
 class Game: public EventSource, public EventListener {
 public:
@@ -29,6 +31,8 @@ public:
 
 protected:
     void eventFireBullet(int param1, int param2, void* extra);
+    void eventAsteroidDestroyed(int param1, int param2, void* extra);
+    void eventBulletDestroyed(int param1, int param2, void* extra);
 
 private:
     EntityManager entityManager;
@@ -42,6 +46,7 @@ private:
     int lives;
     Spaceship* spaceship;
     std::vector<Bullet*> bullets;
+    std::vector<Asteroid*> asteroids;
 
 };
 

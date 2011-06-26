@@ -77,6 +77,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="asteroid.cpp" />
+    <ClCompile Include="asteroidrepresentation.cpp" />
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="bulletrepresentation.cpp" />
     <ClCompile Include="engine.cpp" />
@@ -93,6 +95,8 @@
     <ClCompile Include="vector2d.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="asteroid.h" />
+    <ClInclude Include="asteroidrepresentation.h" />
     <ClInclude Include="bullet.h" />
     <ClInclude Include="bulletrepresentation.h" />
     <ClInclude Include="engine.h" />
