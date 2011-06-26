@@ -12,6 +12,9 @@ enum Event_t {
     EVT_SPACESHIP_RESET,
     EVT_SPACESHIP_STARTTURN,
     EVT_SPACESHIP_STOPTURN,
+    
+    // Bullet events
+    EVT_FIRE_BULLET,
 
     // Game events
     EVT_GAME_RESTART,

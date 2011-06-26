@@ -1,6 +1,7 @@
 #include "entitymanager.h"
 #include "entity.h"
 #include "spaceship.h"
+#include "bullet.h"
 
 EntityManager::EntityManager() {
 }
@@ -40,7 +41,7 @@ Entity* EntityManager::createEntity(EntityType_t entityType) {
             break;
 
         case ENT_BULLET:
-            //newEntity = new Bullet();
+            newEntity = new Bullet();
             break;
 
         case ENT_SPACESHIP:

@@ -1,6 +1,7 @@
 #include "game.h"
 #include "inputcontextgame.h"
 #include "spaceship.h"
+#include "bullet.h"
 
 Game::Game() {
     entityManager.addListener(&entityRepresentationManager);
@@ -70,6 +71,11 @@ void Game::Render(LPDIRECT3DDEVICE9 d3ddev) {
     d3ddev->Clear(1, &rect, D3DCLEAR_TARGET, D3DCOLOR_XRGB(50, 40, 100), 1.0f, 0);
 
     entityRepresentationManager.getRepresentation(spaceship->getId())->render(d3ddev);
+
+    for (int k = 0; k < bullets.size(); k++) {
+        Bullet* bullet = bullets[k];
+        entityRepresentationManager.getRepresentation(bullet->getId())->render(d3ddev);
+    }
 }
 
 void Game::onEvent(Event_t eventType, int param1, int param2, void* extra) {
@@ -94,7 +100,23 @@ void Game::onEvent(Event_t eventType, int param1, int param2, void* extra) {
             spaceship->stopTurn();
             break;
 
+        case EVT_FIRE_BULLET:
+            eventFireBullet(param1, param2, extra);
+            break;
+
         default:
             break;
     }
+}
+
+void Game::eventFireBullet(int param1, int param2, void* extra) {
+    Point2D sourcePos = spaceship->getPos();
+    Vector2D velocity;
+    velocity.setPolar(9.0, spaceship->getRotationRadians());
+
+    Bullet* bullet = dynamic_cast<Bullet*>(entityManager.createEntity(ENT_BULLET));
+    bullet->setPos(sourcePos);
+    bullet->setVelocity(velocity);
+
+    bullets.push_back(bullet);
 }

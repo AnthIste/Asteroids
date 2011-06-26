@@ -1,6 +1,7 @@
 #include "entityrepresentationmanager.h"
 #include "entityrepresentation.h"
 #include "spaceshiprepresentation.h"
+#include "bulletrepresentation.h"
 
 EntityRepresentationManager::EntityRepresentationManager() {
 }
@@ -40,11 +41,11 @@ EntityRepresentation* EntityRepresentationManager::createRepresentation(EntityTy
 
     switch (entityType) {
         case ENT_ASTEROID:
-            //newEntity = new Asteroid();
+            //newRepresentation = new AsteroidRepresentation();
             break;
 
         case ENT_BULLET:
-            //newEntity = new Bullet();
+            newRepresentation = new BulletRepresentation();
             break;
 
         case ENT_SPACESHIP:

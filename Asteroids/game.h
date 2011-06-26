@@ -11,6 +11,7 @@
 
 class InputContext;
 class Spaceship;
+class Bullet;
 
 class Game: public EventSource, public EventListener {
 public:
@@ -26,6 +27,9 @@ public:
     void Render(LPDIRECT3DDEVICE9 d3ddev);
     virtual void onEvent(Event_t eventType, int param1, int param2, void* extra);
 
+protected:
+    void eventFireBullet(int param1, int param2, void* extra);
+
 private:
     EntityManager entityManager;
     EntityRepresentationManager entityRepresentationManager;
@@ -37,6 +41,7 @@ private:
     int score;
     int lives;
     Spaceship* spaceship;
+    std::vector<Bullet*> bullets;
 
 };
 
