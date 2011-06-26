@@ -12,9 +12,17 @@ void InputContextGame::MapInput(UINT message, WPARAM wParam, LPARAM lParam) {
         triggerEvent(EVT_SPACESHIP_THRUST, LOWORD(lParam), HIWORD(lParam), 0);
     } else if (message == WM_LBUTTONUP) {
         triggerEvent(EVT_SPACESHIP_UNTHRUST, wParam, lParam, 0);
-    } else if (message == WM_MOUSEMOVE) {
-        triggerEvent(EVT_SPACESHIP_CHANGETARGET, LOWORD(lParam), HIWORD(lParam), 0);
     } else if (message == WM_KEYDOWN) {
-        triggerEvent(EVT_SPACESHIP_RESET, wParam, lParam, 0);
+        if (wParam == VK_LEFT) {
+            triggerEvent(EVT_SPACESHIP_STARTTURN, -1, 0, 0);
+        } else if (wParam == VK_RIGHT) {
+            triggerEvent(EVT_SPACESHIP_STARTTURN, 1, 0, 0);
+        } else {
+            triggerEvent(EVT_SPACESHIP_RESET, wParam, lParam, 0);
+        }
+    } else if (message == WM_KEYUP) {
+        if (wParam == VK_LEFT || wParam == VK_RIGHT) {
+            triggerEvent(EVT_SPACESHIP_STOPTURN, 0, 0, 0);
+        }
     }
 }

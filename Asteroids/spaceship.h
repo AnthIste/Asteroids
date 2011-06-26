@@ -9,12 +9,22 @@ public:
     virtual ~Spaceship();
 
     virtual void update(double dt);
-    void setTarget(double x, double y);
+    void setVelocity(const Vector2D& velocity) { m_velocity = velocity; }
+    Vector2D getVelocity() const { return m_velocity; }
     void thrust();
     void unthrust();
+    void startTurn(int direction);
+    void stopTurn();
+
+    double getRotationRadians() const { return rotationRadians; }
+    double getRotationTargetRadians() const { return rotationTargetRadians; }
 
 private:
-    Point2D target;
+    Vector2D m_velocity;
+    int turnDirection;
+    double rotationRadians;
+    double rotationTargetRadians;
+    bool bThrust;
 
 };
 

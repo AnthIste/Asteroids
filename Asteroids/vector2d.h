@@ -10,11 +10,15 @@ public:
     double getY() const { return y; }
     void setX(double x) { this->x = x; }
     void setY(double y) { this->y = y; }
-    void set(double x, double y) { this->x = x; this->y = y; }
+    void setXY(double x, double y);
+    void setPolar(double magnitude, double rotation);
     
     void add(const Vector2D& rhs);
     double getMagnitude() const;
     double getDirectionRadians() const;
+    void rotateBy(double rotationDeltaRadians);
+    void setRotationRadians(double rotationRadians);
+    void setMagnitude(double magnitude);
     
 private:
     double x;

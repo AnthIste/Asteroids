@@ -12,7 +12,6 @@
 class InputContext;
 class Spaceship;
 
-// TODO: link game events to input controller
 class Game: public EventSource, public EventListener {
 public:
     Game();
@@ -32,10 +31,12 @@ private:
     EntityRepresentationManager entityRepresentationManager;
     InputContext* inputContext;
 
+    // ----------------------------------------------------
+    // Game State
+    // ----------------------------------------------------
     int score;
     int lives;
     Spaceship* spaceship;
-    // FIXME: reference to other game objects here
 
 };
 
