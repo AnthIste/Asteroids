@@ -17,7 +17,7 @@ Spaceship::~Spaceship() {
 
 void Spaceship::update(double dt) {
     // Rotate spaceship
-    double turnFactor = 15.0 + m_velocity.getMagnitude()*3;
+    double turnFactor = 10.0 + m_velocity.getMagnitude()*3;
 
     if (turnDirection == -1) {
         rotationTargetRadians -= 2 * PI / 360 * 60/turnFactor;
@@ -30,7 +30,7 @@ void Spaceship::update(double dt) {
     rotationRadians += rotationDelta;
 
     // dampen current velocity
-    m_velocity.setMagnitude(m_velocity.getMagnitude() * 0.990);
+    m_velocity.setMagnitude(m_velocity.getMagnitude() * 0.995);
 
     // accellerate in current direction
     if (bThrust) {
@@ -39,8 +39,8 @@ void Spaceship::update(double dt) {
 
         m_velocity.add(newVelocity);
 
-        if (m_velocity.getMagnitude() > 4.0) {
-            m_velocity.setPolar(4.0, m_velocity.getDirectionRadians());
+        if (m_velocity.getMagnitude() > 6.0) {
+            m_velocity.setPolar(6.0, m_velocity.getDirectionRadians());
         }
 
         m_velocity.setPolar(m_velocity.getMagnitude(), m_velocity.getDirectionRadians() + rotationDelta);

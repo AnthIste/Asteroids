@@ -67,14 +67,31 @@ void Game::HandleInput(UINT message, WPARAM wParam, LPARAM lParam) {
 
 void Game::Render(LPDIRECT3DDEVICE9 d3ddev) {
     // TODO: render game in correct order (background, asteroids, spaceship, HUD, etc)
-    D3DRECT rect = {0+score, 0, 100+score, 100};
-    d3ddev->Clear(1, &rect, D3DCLEAR_TARGET, D3DCOLOR_XRGB(50, 40, 100), 1.0f, 0);
+    // TODO: think about how to manage non-entities that also need to be rendered
+    
+    // Clear the background:
+    d3ddev->Clear(1, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
 
+    // Render the ship
     entityRepresentationManager.getRepresentation(spaceship->getId())->render(d3ddev);
 
+    // Render stars
+    srand(666);
+    for (int k = 0; k < 50; k++) {
+        int x = rand() % 800 + 1;
+        int y = rand() % 500 + 1;
+
+        D3DRECT starPos = {x, y, x+1, y+1};
+        d3ddev->Clear(1, &starPos, D3DCLEAR_TARGET, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0);
+    }
+
+    // Render bullets
     for (int k = 0; k < bullets.size(); k++) {
         Bullet* bullet = bullets[k];
-        entityRepresentationManager.getRepresentation(bullet->getId())->render(d3ddev);
+
+        if (!spaceship->collides(*bullet)) {
+            entityRepresentationManager.getRepresentation(bullet->getId())->render(d3ddev);
+        }
     }
 }
 
