@@ -9,6 +9,7 @@ Spaceship::Spaceship() {
     rotationRadians = m_velocity.getDirectionRadians();
     rotationTargetRadians = rotationRadians;
     bThrust = false;
+    setHitRadius(20);
 }
 
 Spaceship::~Spaceship() {

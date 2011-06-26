@@ -16,12 +16,15 @@ void SpaceshipRepresentation::render(LPDIRECT3DDEVICE9 d3ddev) {
 
     // Render the spaceship
     double rotation = spaceship->getRotationRadians();
+    int spaceshipLength = static_cast<int>(spaceship->getHitRadius());
+    int numPasses = 7;
+    int initialSize = spaceshipLength*2.5/numPasses;
 
-    for (int k = 0; k <= 7; k++) {
-        int rotationX = static_cast<int>(entityX + k*7 * cos(rotation));
-        int rotationY = static_cast<int>(entityY + k*7 * sin(rotation));
+    for (int k = 0; k <= numPasses; k++) {
+        int rotationX = static_cast<int>(entityX + k*numPasses * cos(rotation));
+        int rotationY = static_cast<int>(entityY + k*numPasses * sin(rotation));
 
-        D3DRECT rect2 = {rotationX-(7-k+1), rotationY-(7-k+1), rotationX + (7-k+1), rotationY + (7-k+1)};
+        D3DRECT rect2 = {rotationX-(initialSize-k+1), rotationY-(initialSize-k+1), rotationX + (initialSize-k+1), rotationY + (initialSize-k+1)};
         d3ddev->Clear(1, &rect2, D3DCLEAR_TARGET, D3DCOLOR_XRGB(170, 140, 100), 1.0f, 0);
     }
 

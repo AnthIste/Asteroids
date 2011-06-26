@@ -12,6 +12,7 @@ public:
     virtual ~Entity() {}
 
     void setHitRadius(double hitRadius) { m_hitRadius = hitRadius; }
+    double getHitRadius() const { return m_hitRadius; }
     void setPos(const Point2D& pos) { m_pos = pos; }
     Point2D getPos() const { return m_pos; }
     double getX() const { return m_pos.x; }
