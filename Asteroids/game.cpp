@@ -79,8 +79,27 @@ void Game::Update(int dt) {
         spaceship->setPos(Point2D(spaceship->getPos().x, 500));
     }
 
+    for (unsigned int j = 0; j < bullets.size(); j++) {
+        Bullet* bullet = bullets[j];
+
+        for (unsigned int k = 0; k < asteroids.size(); k++) {
+            Asteroid* roid = asteroids[k];
+
+            if (bullet->collides(*roid)) {
+                triggerEvent(EVT_BULLET_DESTROYED, j, 0, bullet);
+                triggerEvent(EVT_ASTEROID_DESTROYED, k, 0, roid);
+                break;
+            }
+        }            
+    }
+
     for (unsigned int k = 0; k < asteroids.size(); k++) {
         Asteroid* roid = asteroids[k];
+
+        if (roid->collides(*spaceship)) {
+            triggerEvent(EVT_SPACESHIP_DESTROYED, 0, 0, roid);
+            break;
+        }
 
         if (roid->getPos().x > 800) {
             roid->setPos(Point2D(0.0, roid->getPos().y));
@@ -90,20 +109,6 @@ void Game::Update(int dt) {
             roid->setPos(Point2D(roid->getPos().x, 0.0));
         } else if (roid->getPos().y < 0) {
             roid->setPos(Point2D(roid->getPos().x, 500));
-        }
-    }
-
-    for (unsigned int k = 0; k < bullets.size(); k++) {
-        Bullet* bullet = bullets[k];
-
-        for (unsigned int j = 0; j < asteroids.size(); j++) {
-            Asteroid* roid = asteroids[j];
-
-            if (bullet->collides(*roid)) {
-                triggerEvent(EVT_BULLET_DESTROYED, k, 0, bullet);
-                triggerEvent(EVT_ASTEROID_DESTROYED, j, 0, roid);
-                break;
-            }
         }
     }
 }
@@ -191,6 +196,10 @@ void Game::onEvent(Event_t eventType, int param1, int param2, void* extra) {
             spaceship->stopTurn();
             break;
 
+        case EVT_SPACESHIP_DESTROYED:
+            eventSpaceshipDestroyed(param1, param2, extra);
+            break;
+
         case EVT_FIRE_BULLET:
             eventFireBullet(param1, param2, extra);
             break;
@@ -251,4 +260,9 @@ void Game::eventBulletDestroyed(int param1, int param2, void* extra) {
     Bullet* bullet = static_cast<Bullet*>(extra);
     bullets.erase(bullets.begin() + param1);
     entityManager.removeEntity(bullet->getId());
+}
+
+void Game::eventSpaceshipDestroyed(int param1, int param2, void* extra) {
+    entityManager.removeEntity(spaceship->getId());
+    spaceship = dynamic_cast<Spaceship*>(entityManager.createEntity(ENT_SPACESHIP));
 }

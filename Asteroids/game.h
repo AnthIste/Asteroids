@@ -33,6 +33,7 @@ protected:
     void eventFireBullet(int param1, int param2, void* extra);
     void eventAsteroidDestroyed(int param1, int param2, void* extra);
     void eventBulletDestroyed(int param1, int param2, void* extra);
+    void eventSpaceshipDestroyed(int param1, int param2, void* extra);
 
 private:
     EntityManager entityManager;
