@@ -3,6 +3,7 @@
 #include "spaceship.h"
 #include "bullet.h"
 #include "asteroid.h"
+#include "starfield.h"
 
 Game::Game() {
     entityManager.addListener(&entityRepresentationManager);
@@ -49,6 +50,8 @@ void Game::Initialize() {
 
         asteroids.push_back(roid);
     }
+
+    starfield = new Starfield(800, 500);
 }
 
 void Game::Reset() {
@@ -111,6 +114,9 @@ void Game::Update(int dt) {
             roid->setPos(Point2D(roid->getPos().x, 500));
         }
     }
+
+    Vector2D shipVelocity = spaceship->getVelocity();
+    starfield->scroll(shipVelocity.getX() * 0.3, shipVelocity.getY() * 0.3);
 }
 
 void Game::HandleInput(UINT message, WPARAM wParam, LPARAM lParam) {
@@ -120,39 +126,13 @@ void Game::HandleInput(UINT message, WPARAM wParam, LPARAM lParam) {
 }
 
 void Game::Render(LPDIRECT3DDEVICE9 d3ddev) {
-    // TODO: render game in correct order (background, asteroids, spaceship, HUD, etc)
     // TODO: think about how to manage non-entities that also need to be rendered
     
     // Clear the background:
     d3ddev->Clear(1, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
 
     // Render stars
-    // Important to use same seed every frame
-    srand(1);
-    for (int k = 0; k < 50; k++) {
-        int x = rand() % 800 + 1;
-        int y = rand() % 500 + 1;
-
-        int sizeSeed = rand() % 100;
-        int size = 1;
-
-        if (sizeSeed > 90) {
-            size = 3;
-        } else if (sizeSeed > 70) {
-            size = 2;
-        }
-
-        if (size == 3) {
-            D3DRECT starPos = {x, y, x+3, y+3};
-            d3ddev->Clear(1, &starPos, D3DCLEAR_TARGET, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0);
-        } else if (size == 2) {
-            D3DRECT starPos = {x, y, x+2, y+2};
-            d3ddev->Clear(1, &starPos, D3DCLEAR_TARGET, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0);
-        } else {
-            D3DRECT starPos = {x, y, x+1, y+1};
-            d3ddev->Clear(1, &starPos, D3DCLEAR_TARGET, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0);
-        }
-    }
+    starfield->render(d3ddev);
 
     // Render asteroids
     for (unsigned int k = 0; k < asteroids.size(); k++) {

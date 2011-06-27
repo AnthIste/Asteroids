@@ -63,6 +63,9 @@
     <ClCompile Include="asteroidrepresentation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="starfield.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="entity.h">
@@ -123,6 +126,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="asteroidrepresentation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="starfield.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

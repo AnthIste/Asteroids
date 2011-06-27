@@ -14,6 +14,7 @@ class InputContext;
 class Spaceship;
 class Bullet;
 class Asteroid;
+class Starfield;
 
 class Game: public EventSource, public EventListener {
 public:
@@ -30,6 +31,10 @@ public:
     virtual void onEvent(Event_t eventType, int param1, int param2, void* extra);
 
 protected:
+    // Render methods
+    void renderStars(LPDIRECT3DDEVICE9 d3ddev);
+
+    // Events
     void eventFireBullet(int param1, int param2, void* extra);
     void eventAsteroidDestroyed(int param1, int param2, void* extra);
     void eventBulletDestroyed(int param1, int param2, void* extra);
@@ -46,6 +51,7 @@ private:
     int score;
     int lives;
     Spaceship* spaceship;
+    Starfield* starfield;
     std::vector<Bullet*> bullets;
     std::vector<Asteroid*> asteroids;
 
