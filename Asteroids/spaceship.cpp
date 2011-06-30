@@ -15,7 +15,7 @@ Spaceship::Spaceship() {
 Spaceship::~Spaceship() {
 }
 
-void Spaceship::update(double dt) {
+void Spaceship::update(int dt) {
     // Rotate spaceship
     double turnFactor = 10.0 + m_velocity.getMagnitude()*3;
 

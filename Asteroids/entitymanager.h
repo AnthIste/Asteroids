@@ -12,13 +12,12 @@ public:
     EntityManager();
     virtual ~EntityManager();
 
-    void addEntity(Entity* entity);
-    void removeEntity(int id);
     void purge();
-    void updateAll(double dt);
+    void updateAll(int dt);
     const std::vector<Entity*>& getEntities() const { return vEntities; }
 
     Entity* createEntity(EntityType_t entityType);
+    void removeEntity(int id);
 
 private:
     std::vector<Entity*> vEntities;

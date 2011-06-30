@@ -1,16 +1,18 @@
 #include "bullet.h"
 
 Bullet::Bullet() {
-    timeAlive = 0.0;
+    timeAlive = 0;
+    timeExpire = 0;
 }
 
 Bullet::~Bullet() {
 }
 
-void Bullet::update(double dt) {
+void Bullet::update(int dt) {
     timeAlive += dt;
-
-    // TODO: check if bullet expires
-
     setPos(Point2D(getPos().x + getVelocity().getX(), getPos().y + getVelocity().getY()));
+}
+
+bool Bullet::hasExpired() {
+    return (timeExpire != 0 && timeAlive > timeExpire);
 }

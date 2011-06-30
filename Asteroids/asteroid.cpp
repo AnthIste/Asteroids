@@ -2,14 +2,15 @@
 
 Asteroid::Asteroid() {
     setSize(3);
+    spin = 0.0;
+    rotation = 0.0;
 }
 
 Asteroid::~Asteroid() {
 }
 
-void Asteroid::update(double dt) {
-    // TODO: gently spin the asteroid
-
+void Asteroid::update(int dt) {
+    rotation += spin;
     setPos(Point2D(getPos().x + getVelocity().getX(), getPos().y + getVelocity().getY()));
 }
 

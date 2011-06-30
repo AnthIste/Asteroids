@@ -12,9 +12,11 @@ public:
     Vector2D getVelocity() const { return m_velocity; }
     void setSpin(double spin) { this->spin = spin; }
     double getSpin() const { return spin; }
+    void setRotation(double rotation) { this->rotation = rotation; }
+    double getRotation() const { return rotation; }
     int getSize() const { return size; }
 
-    virtual void update(double dt);
+    virtual void update(int dt);
     void setSize(int size);
 
 private:

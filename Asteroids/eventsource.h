@@ -13,7 +13,6 @@ public:
 
     void addListener(EventListener* listener);
     void removeListener(EventListener* listener);
-    // TODO: add method of removing listeners
 
 protected:
     void triggerEvent(Event_t eventType, int param1, int param2, void* extra);

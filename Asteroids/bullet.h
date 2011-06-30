@@ -10,12 +10,17 @@ public:
 
     void setVelocity(const Vector2D& velocity) { m_velocity = velocity; }
     Vector2D getVelocity() const { return m_velocity; }
+    void setTimeExpire(int timeExpire) { this->timeExpire = timeExpire; }
+    int getTimeExpire() const { return timeExpire; }
 
-    virtual void update(double dt);
+    virtual void update(int dt);
+    bool hasExpired();
 
 private:
     Vector2D m_velocity;
-    double timeAlive;
+    int timeAlive;
+    int timeExpire;
+
 };
 
 #endif  // ASTEROIDS_BULLET_H_

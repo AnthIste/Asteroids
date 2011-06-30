@@ -5,6 +5,7 @@ enum Event_t {
     // Asteroid events
     EVT_ASTEROID_SPAWN,
     EVT_ASTEROID_DESTROYED,
+    EVT_ASTEROIDS_RESET,
 
     // Spaceship events
     EVT_SPACESHIP_SPAWN,

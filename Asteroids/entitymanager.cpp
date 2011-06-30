@@ -11,29 +11,7 @@ EntityManager::~EntityManager() {
     purge();
 }
 
-void EntityManager::addEntity(Entity* entity) {
-    vEntities.push_back(entity);
-    // TODO: trigger correct event
-    // TODO: use factory method, or registration method?
-}
-
-void EntityManager::removeEntity(int id) {
-    for (unsigned int k = 0; k < vEntities.size(); k++) {
-        if (vEntities[k]->getId() == id) {
-            Entity* entity = vEntities[k];
-            
-            vEntities.erase(vEntities.begin() + k);
-            triggerEvent(EVT_ENTITY_DESTROYED, entity->getId(), 0, 0);
-            delete entity;
-
-            break;
-        }
-    }
-}
-
 Entity* EntityManager::createEntity(EntityType_t entityType) {
-    // TODO: create entity factory
-
     Entity* newEntity = 0;
 
     switch (entityType) {
@@ -50,7 +28,7 @@ Entity* EntityManager::createEntity(EntityType_t entityType) {
             break;
 
         default:
-            // TODO: error handling
+            return 0;
             break;
     }
 
@@ -60,9 +38,29 @@ Entity* EntityManager::createEntity(EntityType_t entityType) {
     return newEntity;
 }
 
+void EntityManager::removeEntity(int id) {
+    for (unsigned int k = 0; k < vEntities.size(); k++) {
+        if (vEntities[k]->getId() == id) {
+            Entity* entity = vEntities[k];
+            
+            vEntities.erase(vEntities.begin() + k);
+
+            // This will signal the entity representation manager and other listeners
+            // that an entity is no longer valid
+            triggerEvent(EVT_ENTITY_DESTROYED, entity->getId(), 0, 0);
+            delete entity;
+
+            break;
+        }
+    }
+}
+
 void EntityManager::purge() {
     for (unsigned int k = 0; k < vEntities.size(); k++) {
         Entity* entity = vEntities[k];
+
+        // This will signal the entity representation manager and other listeners
+        // that an entity is no longer valid
         triggerEvent(EVT_ENTITY_DESTROYED, entity->getId(), 0, 0);
         delete entity;
     }
@@ -70,7 +68,7 @@ void EntityManager::purge() {
     vEntities.clear();
 }
 
-void EntityManager::updateAll(double dt) {
+void EntityManager::updateAll(int dt) {
     for (unsigned int k = 0; k < vEntities.size(); k++) {
         Entity* entity = vEntities[k];
         entity->update(dt);

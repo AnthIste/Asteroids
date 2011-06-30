@@ -8,7 +8,7 @@ public:
     Spaceship();
     virtual ~Spaceship();
 
-    virtual void update(double dt);
+    virtual void update(int dt);
     void setVelocity(const Vector2D& velocity) { m_velocity = velocity; }
     Vector2D getVelocity() const { return m_velocity; }
     void thrust();

@@ -20,7 +20,7 @@ public:
     int getId() const { return m_id; }
     bool collides(const Entity& ent);
 
-    virtual void update(double dt) = 0;
+    virtual void update(int dt) = 0;
 
 private:
     Point2D m_pos;

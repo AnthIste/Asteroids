@@ -8,14 +8,14 @@ EntityRepresentationManager::EntityRepresentationManager() {
 }
 
 EntityRepresentationManager::~EntityRepresentationManager() {
-    // TODO: this should not be necessary if all events are handled correctly
+    // NOTE: this should not be necessary if all events are handled correctly
+    // If there is ever a logger class, this should be logged
     for (unsigned int k = 0; k < mEntityRepresentations.size(); k++) {
         delete mEntityRepresentations[k];
     }
 }
 
 void EntityRepresentationManager::onEvent(Event_t eventType, int param1, int param2, void* extra) {
-    // TODO: check for entity create/delete and map representation accordingly
     switch (eventType) {
         case EVT_ENTITY_CREATED:
             mEntityRepresentations[param1] = createRepresentation(static_cast<EntityType_t>(param2));
@@ -28,7 +28,6 @@ void EntityRepresentationManager::onEvent(Event_t eventType, int param1, int par
             break;
 
         default:
-            // TODO: add error handling
             break;
     }
 }
@@ -54,7 +53,7 @@ EntityRepresentation* EntityRepresentationManager::createRepresentation(EntityTy
             break;
 
         default:
-            // TODO: error handling
+            return 0;
             break;
     }
 

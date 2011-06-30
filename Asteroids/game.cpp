@@ -11,8 +11,10 @@ Game::Game() {
     inputContext->addListener(this);
     this->addListener(this);
 
-    // TODO: initialize all pointers etc to null
     spaceship = 0;
+    score = 0;
+    lives = 0;
+    starfield = 0;
 }
 
 Game::~Game() {
@@ -25,32 +27,19 @@ Game::~Game() {
 }
 
 void Game::Initialize() {
-    // TODO: create all initial entities, reset score, etc
+    // Initialize game lives/score to default values
     score = 0;
     lives = 3;
 
+    // FIXME: use proper game dimensions for starting position
+    // Create initial spaceship
     spaceship = dynamic_cast<Spaceship*>(entityManager.createEntity(ENT_SPACESHIP));
     spaceship->setPos(Point2D(400, 250));
     triggerEvent(EVT_SPACESHIP_SPAWN, 0, 0, spaceship);
 
-    srand(static_cast<unsigned int>(time(0)));
-    
-    for (int k = 0; k < 3; k++) {
-        int x = rand() % 800 + 1;
-        int y = rand() % 500 + 1;
+    spawnAsteroids(4);
 
-        double vx = (rand() % 100)/100.0*3 - 1.5;
-        double vy = (rand() % 100)/100.0*3 - 1.5;
-
-        Asteroid* roid = dynamic_cast<Asteroid*>(entityManager.createEntity(ENT_ASTEROID));
-        roid->setPos(Point2D(x, y));
-        roid->setVelocity(Vector2D(vx, vy));
-
-        triggerEvent(EVT_ASTEROID_SPAWN, 0, 0, roid);
-
-        asteroids.push_back(roid);
-    }
-
+    // Initialize the starry background
     starfield = new Starfield(800, 500);
 }
 
@@ -60,18 +49,23 @@ void Game::Reset() {
 }
 
 void Game::Cleanup() {
+    // This will free memory allocated by all entities
     entityManager.purge();
     
     // TODO: initialize all pointers etc to null
     spaceship = 0;
+    delete starfield;
+    starfield = 0;
     asteroids.clear();
     bullets.clear();
 }
 
 void Game::Update(int dt) {
+    // Update all entities with current time delta
     entityManager.updateAll(dt);
 
     // FIXME: set playing area size
+    // Loop spaceship over screen edges
     if (spaceship->getPos().x > 800) {
         spaceship->setPos(Point2D(0.0, spaceship->getPos().y));
     } else if (spaceship->getPos().x < 0) {
@@ -82,8 +76,16 @@ void Game::Update(int dt) {
         spaceship->setPos(Point2D(spaceship->getPos().x, 500));
     }
 
+    // Update bullets and
+    // Check for bullet collisions and
+    // Remove expired bullets
     for (unsigned int j = 0; j < bullets.size(); j++) {
         Bullet* bullet = bullets[j];
+
+        if (bullet->hasExpired()) {
+            triggerEvent(EVT_BULLET_DESTROYED, j, 0, bullet);
+            continue;
+        }
 
         for (unsigned int k = 0; k < asteroids.size(); k++) {
             Asteroid* roid = asteroids[k];
@@ -96,6 +98,8 @@ void Game::Update(int dt) {
         }            
     }
 
+    // Loop asteroids past edges of screen and
+    // Check for asteroid/spaceship collisions
     for (unsigned int k = 0; k < asteroids.size(); k++) {
         Asteroid* roid = asteroids[k];
 
@@ -115,6 +119,7 @@ void Game::Update(int dt) {
         }
     }
 
+    // Scroll the background based on the current ship velocity
     Vector2D shipVelocity = spaceship->getVelocity();
     starfield->scroll(shipVelocity.getX() * 0.3, shipVelocity.getY() * 0.3);
 }
@@ -151,6 +156,27 @@ void Game::Render(LPDIRECT3DDEVICE9 d3ddev) {
         if (!spaceship->collides(*bullet)) {
             entityRepresentationManager.getRepresentation(bullet->getId())->render(d3ddev);
         }
+    }
+}
+
+void Game::spawnAsteroids(int numAsteroids) {
+    // Create asteroids in random positions with random velocities
+    srand(static_cast<unsigned int>(time(0)));
+    
+    for (int k = 0; k < numAsteroids; k++) {
+        int x = rand() % 800 + 1;
+        int y = rand() % 500 + 1;
+
+        double vx = (rand() % 100)/100.0*3 - 1.5;
+        double vy = (rand() % 100)/100.0*3 - 1.5;
+
+        Asteroid* roid = dynamic_cast<Asteroid*>(entityManager.createEntity(ENT_ASTEROID));
+        roid->setPos(Point2D(x, y));
+        roid->setVelocity(Vector2D(vx, vy));
+
+        triggerEvent(EVT_ASTEROID_SPAWN, 0, 0, roid);
+
+        asteroids.push_back(roid);
     }
 }
 
@@ -192,6 +218,10 @@ void Game::onEvent(Event_t eventType, int param1, int param2, void* extra) {
             eventBulletDestroyed(param1, param2, extra);
             break;
 
+        case EVT_ASTEROIDS_RESET:
+            eventAsteroidsReset(param1, param2, extra);
+            break;
+
         default:
             break;
     }
@@ -205,6 +235,7 @@ void Game::eventFireBullet(int param1, int param2, void* extra) {
     Bullet* bullet = dynamic_cast<Bullet*>(entityManager.createEntity(ENT_BULLET));
     bullet->setPos(sourcePos);
     bullet->setVelocity(velocity);
+    bullet->setTimeExpire(1000);
 
     bullets.push_back(bullet);
 
@@ -221,7 +252,7 @@ void Game::eventAsteroidDestroyed(int param1, int param2, void* extra) {
     entityManager.removeEntity(roid->getId());
 
     srand(time(0));
-    for (int k = 0; k < size-1; k++) {
+    for (int k = 0; k < size+1 && size != 1; k++) {
         double vx = (rand() % 100)/100.0*3 - 1.5;
         double vy = (rand() % 100)/100.0*3 - 1.5;
 
@@ -234,6 +265,10 @@ void Game::eventAsteroidDestroyed(int param1, int param2, void* extra) {
 
         asteroids.push_back(newRoid);
     }
+
+    if (asteroids.empty()) {
+        triggerEvent(EVT_ASTEROIDS_RESET,0, 0, 0);
+    }
 }
 
 void Game::eventBulletDestroyed(int param1, int param2, void* extra) {
@@ -245,4 +280,9 @@ void Game::eventBulletDestroyed(int param1, int param2, void* extra) {
 void Game::eventSpaceshipDestroyed(int param1, int param2, void* extra) {
     entityManager.removeEntity(spaceship->getId());
     spaceship = dynamic_cast<Spaceship*>(entityManager.createEntity(ENT_SPACESHIP));
+}
+
+void Game::eventAsteroidsReset(int param1, int param2, void* extra) {
+    // TODO: modify number of asteroids based on score
+    spawnAsteroids(4);
 }

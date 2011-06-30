@@ -58,6 +58,8 @@ void Engine::run() {
     game->Initialize();
 
     MSG msg;
+    DWORD dwTicks = GetTickCount();
+
     while (true) {
         if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) == TRUE) {
             TranslateMessage(&msg);
@@ -68,9 +70,12 @@ void Engine::run() {
             break;
         }
 
-        // TODO: get dt
-        game->Update(0);
+        DWORD dwNewTicks = GetTickCount();
+
+        game->Update(dwNewTicks - dwTicks);
         render_frame();
+
+        dwTicks = dwNewTicks;
     }
 }
 
