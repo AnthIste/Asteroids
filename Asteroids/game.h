@@ -36,6 +36,7 @@ protected:
 
     // Helper methods
     void spawnAsteroids(int numAsteroids);
+    void loopEntity(Entity* entity);
 
     // Events
     void eventFireBullet(int param1, int param2, void* extra);

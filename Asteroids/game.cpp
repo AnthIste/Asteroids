@@ -66,15 +66,7 @@ void Game::Update(int dt) {
 
     // FIXME: set playing area size
     // Loop spaceship over screen edges
-    if (spaceship->getPos().x > 800) {
-        spaceship->setPos(Point2D(0.0, spaceship->getPos().y));
-    } else if (spaceship->getPos().x < 0) {
-        spaceship->setPos(Point2D(800, spaceship->getPos().y));
-    } else if (spaceship->getPos().y > 500) {
-        spaceship->setPos(Point2D(spaceship->getPos().x, 0.0));
-    } else if (spaceship->getPos().y < 0) {
-        spaceship->setPos(Point2D(spaceship->getPos().x, 500));
-    }
+    loopEntity(spaceship);
 
     // Update bullets and
     // Check for bullet collisions and
@@ -84,18 +76,17 @@ void Game::Update(int dt) {
 
         if (bullet->hasExpired()) {
             triggerEvent(EVT_BULLET_DESTROYED, j, 0, bullet);
-            continue;
-        }
+        } else {
+            for (unsigned int k = 0; k < asteroids.size(); k++) {
+                Asteroid* roid = asteroids[k];
 
-        for (unsigned int k = 0; k < asteroids.size(); k++) {
-            Asteroid* roid = asteroids[k];
-
-            if (bullet->collides(*roid)) {
-                triggerEvent(EVT_BULLET_DESTROYED, j, 0, bullet);
-                triggerEvent(EVT_ASTEROID_DESTROYED, k, 0, roid);
-                break;
+                if (bullet->collides(*roid)) {
+                    triggerEvent(EVT_BULLET_DESTROYED, j, 0, bullet);
+                    triggerEvent(EVT_ASTEROID_DESTROYED, k, 0, roid);
+                    break;
+                }
             }
-        }            
+        }
     }
 
     // Loop asteroids past edges of screen and
@@ -105,18 +96,9 @@ void Game::Update(int dt) {
 
         if (roid->collides(*spaceship)) {
             triggerEvent(EVT_SPACESHIP_DESTROYED, 0, 0, roid);
-            break;
         }
 
-        if (roid->getPos().x > 800) {
-            roid->setPos(Point2D(0.0, roid->getPos().y));
-        } else if (roid->getPos().x < 0) {
-            roid->setPos(Point2D(800, roid->getPos().y));
-        } else if (roid->getPos().y > 500) {
-            roid->setPos(Point2D(roid->getPos().x, 0.0));
-        } else if (roid->getPos().y < 0) {
-            roid->setPos(Point2D(roid->getPos().x, 500));
-        }
+        loopEntity(roid);
     }
 
     // Scroll the background based on the current ship velocity
@@ -177,6 +159,19 @@ void Game::spawnAsteroids(int numAsteroids) {
         triggerEvent(EVT_ASTEROID_SPAWN, 0, 0, roid);
 
         asteroids.push_back(roid);
+    }
+}
+
+// FIXME: use proper game dimension
+void Game::loopEntity(Entity* entity) {
+    if (entity->getPos().x > 800) {
+        entity->setPos(Point2D(0.0, entity->getPos().y));
+    } else if (entity->getPos().x < 0) {
+        entity->setPos(Point2D(800, entity->getPos().y));
+    } else if (entity->getPos().y > 500) {
+        entity->setPos(Point2D(entity->getPos().x, 0.0));
+    } else if (entity->getPos().y < 0) {
+        entity->setPos(Point2D(entity->getPos().x, 500));
     }
 }
 
